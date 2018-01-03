@@ -16,6 +16,12 @@
     <packaging>war</packaging>
 
     <dependencies>
+        <dependency>
+            <groupId>com.zhzhgang</groupId>
+            <artifactId>mall-common</artifactId>
+            <version>0.0.1-SNAPSHOT</version>
+        </dependency>
+        
         <!-- Spring -->
         <dependency>
             <groupId>org.springframework</groupId>
@@ -66,6 +72,19 @@
             <artifactId>commons-fileupload</artifactId>
         </dependency>
     </dependencies>
+
+    <build>
+        <plugins>
+            <plugin>
+                <groupId>org.apache.tomcat.maven</groupId>
+                <artifactId>tomcat7-maven-plugin</artifactId>
+                <configuration>
+                    <path>/</path>
+                    <port>8081</port>
+                </configuration>
+            </plugin>
+        </plugins>
+    </build>
 
 
 </project>
