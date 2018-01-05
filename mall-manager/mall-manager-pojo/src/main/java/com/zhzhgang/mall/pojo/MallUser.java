@@ -1,8 +1,9 @@
 package com.zhzhgang.mall.pojo;
 
+import java.io.Serializable;
 import java.util.Date;
 
-public class MallUser {
+public class MallUser implements Serializable {
     private Long id;
 
     private String username;

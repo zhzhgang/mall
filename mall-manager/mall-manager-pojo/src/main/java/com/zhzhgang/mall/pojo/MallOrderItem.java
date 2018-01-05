@@ -1,6 +1,8 @@
 package com.zhzhgang.mall.pojo;
 
-public class MallOrderItem {
+import java.io.Serializable;
+
+public class MallOrderItem implements Serializable {
     private String id;
 
     private String itemId;

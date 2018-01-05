@@ -1,8 +1,9 @@
 package com.zhzhgang.mall.pojo;
 
+import java.io.Serializable;
 import java.util.Date;
 
-public class MallItemCat {
+public class MallItemCat implements Serializable {
     private Long id;
 
     private Long parentId;

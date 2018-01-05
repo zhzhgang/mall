@@ -1,8 +1,9 @@
 package com.zhzhgang.mall.pojo;
 
+import java.io.Serializable;
 import java.util.Date;
 
-public class MallOrder {
+public class MallOrder implements Serializable {
     private String orderId;
 
     private String payment;
