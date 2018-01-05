@@ -1,4 +1,4 @@
-package com.zhzhgang.mall.comon.pojo;
+package com.zhzhgang.mall.common.pojo;
 
 import java.io.Serializable;
 import java.util.List;
