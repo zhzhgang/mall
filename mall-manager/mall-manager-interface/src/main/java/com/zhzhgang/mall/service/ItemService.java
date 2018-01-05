@@ -1,5 +1,6 @@
 package com.zhzhgang.mall.service;
 
+import com.zhzhgang.mall.common.pojo.ResponseResult;
 import com.zhzhgang.mall.pojo.MallItem;
 
 /**
@@ -9,5 +10,7 @@ import com.zhzhgang.mall.pojo.MallItem;
 public interface ItemService {
 
     MallItem getItemById(long itemId);
+
+    ResponseResult getItemList(int page, int rows);
 
 }
