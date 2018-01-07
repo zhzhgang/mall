@@ -37,6 +37,10 @@
                 <configuration>
                     <path>/</path>
                     <port>8080</port>
+                    <!--log4j配置文件位置-->
+                    <systemProperties>
+                        <log4j.configuration>file:src/main/resources/properties/log4j.properties</log4j.configuration>
+                    </systemProperties>
                 </configuration>
             </plugin>
         </plugins>
