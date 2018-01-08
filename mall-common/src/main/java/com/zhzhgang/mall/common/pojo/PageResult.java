@@ -7,7 +7,7 @@ import java.util.List;
  * @author zhangzhonggang
  * @create 2018-01-05 15:08
  */
-public class ResponseResult implements Serializable {
+public class PageResult implements Serializable {
 
     private long total;
 

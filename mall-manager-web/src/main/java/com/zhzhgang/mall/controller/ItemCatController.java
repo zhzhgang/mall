@@ -1,6 +1,5 @@
 package com.zhzhgang.mall.controller;
 
-import com.zhzhgang.mall.common.pojo.ResponseResult;
 import com.zhzhgang.mall.common.pojo.TreeNode;
 import com.zhzhgang.mall.service.ItemCatService;
 import org.springframework.beans.factory.annotation.Autowired;
