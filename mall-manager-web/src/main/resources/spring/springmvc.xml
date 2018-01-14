@@ -32,4 +32,5 @@
     <dubbo:reference interface="com.zhzhgang.mall.service.ItemService" id="itemService" />
     <dubbo:reference interface="com.zhzhgang.mall.service.ItemCatService" id="itemCatService" />
     <dubbo:reference interface="com.zhzhgang.mall.content.service.ContentCategoryService" id="contentCategoryService" />
+    <dubbo:reference interface="com.zhzhgang.mall.content.service.ContentService" id="contentServiceImpl" />
 </beans>
