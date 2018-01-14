@@ -12,6 +12,8 @@
         http://www.springframework.org/schema/context
         http://www.springframework.org/schema/context/spring-context-4.2.xsd">
 
+    <!--加载属性文件-->
+    <context:property-placeholder location="classpath:resource/resource.properties"/>
     <!-- 配置注解驱动 -->
     <mvc:annotation-driven />
     <!-- 视图解析器 -->
@@ -25,6 +27,5 @@
     <!--引用 dubbo 服务-->
     <dubbo:application name="mall-portal-web"/>
     <dubbo:registry protocol="zookeeper" address="192.168.56.101:2181"/>
-    <!--<dubbo:reference interface="com.zhzhgang.mall.service.ItemService" id="itemService" />-->
-    <!--<dubbo:reference interface="com.zhzhgang.mall.service.ItemCatService" id="itemCatService" />-->
+    <dubbo:reference interface="com.zhzhgang.mall.content.service.ContentService" id="contentService" />
 </beans>
