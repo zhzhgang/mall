@@ -39,7 +39,7 @@ public class ContentCategoryServiceImpl implements ContentCategoryService {
         for (MallContentCategory mallContentCategory : list) {
             TreeNode treeNode = new TreeNode();
             treeNode.setId(mallContentCategory.getId());
-            treeNode.setState(mallContentCategory.getName());
+            treeNode.setText(mallContentCategory.getName());
             treeNode.setState(mallContentCategory.getIsParent() ? "closed" : "open");
             treeNodeList.add(treeNode);
         }
