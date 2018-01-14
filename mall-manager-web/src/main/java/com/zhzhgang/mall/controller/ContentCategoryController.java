@@ -1,5 +1,6 @@
 package com.zhzhgang.mall.controller;
 
+import com.zhzhgang.mall.common.pojo.MallResult;
 import com.zhzhgang.mall.common.pojo.TreeNode;
 import com.zhzhgang.mall.content.service.ContentCategoryService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -25,5 +26,11 @@ public class ContentCategoryController {
     @ResponseBody
     public List<TreeNode> getContentCategoryList(@RequestParam(value = "id", defaultValue = "0") Long parentId) {
         return contentCategoryService.getContentCategoryList(parentId);
+    }
+
+    @RequestMapping("/content/category/create")
+    @ResponseBody
+    public MallResult addContentCategory(Long parentId, String name) {
+        return contentCategoryService.addContentCategory(parentId, name);
     }
 }

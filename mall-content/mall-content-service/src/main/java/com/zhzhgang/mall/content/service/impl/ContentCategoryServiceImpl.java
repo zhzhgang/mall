@@ -1,5 +1,6 @@
 package com.zhzhgang.mall.content.service.impl;
 
+import com.zhzhgang.mall.common.pojo.MallResult;
 import com.zhzhgang.mall.common.pojo.TreeNode;
 import com.zhzhgang.mall.content.service.ContentCategoryService;
 import com.zhzhgang.mall.mapper.MallContentCategoryMapper;
@@ -10,6 +11,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.List;
 
 /**
@@ -44,5 +46,36 @@ public class ContentCategoryServiceImpl implements ContentCategoryService {
             treeNodeList.add(treeNode);
         }
         return treeNodeList;
+    }
+
+    /**
+     * 添加内容分类
+     *
+     * @param parentId : 父类目ID
+     * @param name     : 分类名
+     * @return
+     */
+    @Override
+    public MallResult addContentCategory(Long parentId, String name) {
+        MallContentCategory contentCategory = new MallContentCategory();
+        contentCategory.setParentId(parentId);
+        contentCategory.setName(name);
+        // 内容分类状态：1-正常；2-删除
+        contentCategory.setStatus(1);
+        contentCategory.setSortOrder(1);
+        contentCategory.setCreated(new Date());
+        contentCategory.setUpdated(new Date());
+        contentCategory.setIsParent(false);
+
+        mallContentCategoryMapper.insert(contentCategory);
+
+        // 判断并设置父节点状态
+        MallContentCategory parentContentCategory = mallContentCategoryMapper.selectByPrimaryKey(parentId);
+        if (parentContentCategory != null && !parentContentCategory.getIsParent()) {
+            parentContentCategory.setIsParent(true);
+            mallContentCategoryMapper.updateByPrimaryKey(parentContentCategory);
+        }
+
+        return MallResult.ok(contentCategory);
     }
 }
