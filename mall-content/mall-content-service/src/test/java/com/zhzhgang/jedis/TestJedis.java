@@ -1,8 +1,13 @@
 package com.zhzhgang.jedis;
 
 import org.junit.Test;
+import redis.clients.jedis.HostAndPort;
 import redis.clients.jedis.Jedis;
+import redis.clients.jedis.JedisCluster;
 import redis.clients.jedis.JedisPool;
+
+import java.util.HashSet;
+import java.util.Set;
 
 /**
  * @author zhzhgang
@@ -27,5 +32,20 @@ public class TestJedis {
         System.out.println("-----------zhzhgang-----------s值 = " + s + ", " + "当前类 = TestJedis.testJedisPool()");
         jedis.close();
         pool.close();
+    }
+
+    @Test
+    public void testJedisCluster() {
+        Set<HostAndPort> nodes = new HashSet<>();
+        nodes.add(new HostAndPort("192.168.56.101", 7001));
+        nodes.add(new HostAndPort("192.168.56.101", 7002));
+        nodes.add(new HostAndPort("192.168.56.101", 7003));
+        nodes.add(new HostAndPort("192.168.56.101", 7004));
+        nodes.add(new HostAndPort("192.168.56.101", 7005));
+        nodes.add(new HostAndPort("192.168.56.101", 7006));
+        JedisCluster cluster = new JedisCluster(nodes);
+        cluster.set("key1", "abc");
+        String s = cluster.get("key1");
+        System.out.println("-----------zhzhgang-----------s值 = " + s + ", " + "当前类 = TestJedis.testJedisCluster()");
     }
 }
