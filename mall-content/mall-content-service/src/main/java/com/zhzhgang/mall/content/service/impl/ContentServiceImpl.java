@@ -47,7 +47,7 @@ public class ContentServiceImpl implements ContentService {
         // 同步缓存
         // 删除对应的缓存信息
         jedisClient.hdel(INDEX_CONTENT, content.getCategoryId().toString());
-        
+
         return MallResult.ok();
     }
 
