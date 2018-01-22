@@ -30,7 +30,7 @@
     </bean>
     <!-- Mapper映射文件的包扫描器 -->
     <bean class="org.mybatis.spring.mapper.MapperScannerConfigurer">
-        <property name="basePackage" value="com.zhzhgang.mall.mapper" />
+        <property name="basePackage" value="com.zhzhgang.mall.mapper, com.zhzhgang.mall.search.mapper" />
     </bean>
 
 </beans>
