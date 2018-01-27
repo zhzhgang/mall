@@ -27,5 +27,5 @@
     <!--引用 dubbo 服务-->
     <dubbo:application name="mall-search-web"/>
     <dubbo:registry protocol="zookeeper" address="192.168.56.101:2181"/>
-    <!--<dubbo:reference interface="com.zhzhgang.mall.content.service.ContentService" id="contentService" />-->
+    <dubbo:reference interface="com.zhzhgang.mall.search.service.SearchService" id="searchServiceImpl" />
 </beans>
