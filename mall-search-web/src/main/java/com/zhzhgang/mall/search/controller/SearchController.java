@@ -9,6 +9,8 @@ import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 
+import java.io.UnsupportedEncodingException;
+
 /**
  * 商品搜索服务 Controller
  *
@@ -28,6 +30,13 @@ public class SearchController {
     public String search(@RequestParam("q") String queryString,
                          @RequestParam(defaultValue = "1") Integer page,
                          Model model) {
+
+        // 解决 get 乱码问题，把查询条件进行转码
+        try {
+            queryString = new String(queryString.getBytes("iso8859-1"), "UTF-8");
+        } catch (UnsupportedEncodingException e) {
+            e.printStackTrace();
+        }
 
         SearchResult result = searchService.search(queryString, page, SEARCH_RESULT_ROWS);
 
