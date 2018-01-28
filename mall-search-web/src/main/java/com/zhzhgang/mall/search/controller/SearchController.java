@@ -31,6 +31,7 @@ public class SearchController {
                          @RequestParam(defaultValue = "1") Integer page,
                          Model model) {
 
+        // int i = 1 / 0;
         // 解决 get 乱码问题，把查询条件进行转码
         try {
             queryString = new String(queryString.getBytes("iso8859-1"), "UTF-8");
