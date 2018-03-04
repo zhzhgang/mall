@@ -12,8 +12,12 @@ import com.zhzhgang.mall.pojo.MallItemDesc;
 import com.zhzhgang.mall.pojo.MallItemExample;
 import com.zhzhgang.mall.service.ItemService;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.jms.core.JmsTemplate;
+import org.springframework.jms.core.MessageCreator;
 import org.springframework.stereotype.Service;
 
+import javax.annotation.Resource;
+import javax.jms.*;
 import java.util.Date;
 import java.util.List;
 
@@ -30,6 +34,12 @@ public class ItemServiceImpl implements ItemService {
 
     @Autowired
     MallItemDescMapper mallItemDescMapper;
+
+    @Autowired
+    private JmsTemplate jmsTemplate;
+
+    @Resource(name = "itemAddTopic")
+    private Destination destination;
 
     @Override
     public MallItem getItemById(long itemId) {
@@ -60,8 +70,9 @@ public class ItemServiceImpl implements ItemService {
      * @return MallResult
      */
     @Override
-    public MallResult addItem(MallItem mallItem, String desc) {
-        mallItem.setId(IDUtils.genItemId());
+    public MallResult addItem(final MallItem mallItem, String desc) {
+        final long itemId = IDUtils.genItemId();
+        mallItem.setId(itemId);
         // 商品状态：1-正常；2-下架；3-删除
         mallItem.setStatus((byte) 1);
         mallItem.setCreated(new Date());
@@ -74,6 +85,16 @@ public class ItemServiceImpl implements ItemService {
         mallItemDesc.setCreated(new Date());
         mallItemDesc.setUpdated(new Date());
         mallItemDescMapper.insert(mallItemDesc);
+
+        // 向 ActiveMQ 发送商品添加的消息
+        jmsTemplate.send(destination, new MessageCreator() {
+            @Override
+            public Message createMessage(Session session) throws JMSException {
+                // 发送商品 ID
+                TextMessage message = session.createTextMessage(itemId + "");
+                return message;
+            }
+        });
 
         return MallResult.ok();
     }

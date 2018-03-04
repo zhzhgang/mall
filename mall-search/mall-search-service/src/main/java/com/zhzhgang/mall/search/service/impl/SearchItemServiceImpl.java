@@ -22,7 +22,7 @@ public class SearchItemServiceImpl implements SearchItemService {
     private SearchItemMapper searchItemMapper;
 
     @Autowired
-    SolrServer solrServer;
+    private SolrServer solrServer;
 
     /**
      * 导入商品数据到数据库
