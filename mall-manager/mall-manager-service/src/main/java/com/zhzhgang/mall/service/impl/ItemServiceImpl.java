@@ -98,4 +98,12 @@ public class ItemServiceImpl implements ItemService {
 
         return MallResult.ok();
     }
+
+    @Override
+    public MallItemDesc getItemDescById(long itemId) {
+        MallItemDesc mallItemDesc = mallItemDescMapper.selectByPrimaryKey(itemId);
+        return mallItemDesc;
+    }
+
+
 }

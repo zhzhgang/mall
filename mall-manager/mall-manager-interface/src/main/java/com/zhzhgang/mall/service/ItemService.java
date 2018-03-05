@@ -3,6 +3,7 @@ package com.zhzhgang.mall.service;
 import com.zhzhgang.mall.common.pojo.MallResult;
 import com.zhzhgang.mall.common.pojo.PageResult;
 import com.zhzhgang.mall.pojo.MallItem;
+import com.zhzhgang.mall.pojo.MallItemDesc;
 
 /**
  * @author zhangzhonggang
@@ -21,5 +22,7 @@ public interface ItemService {
      * @return MallResult
      */
     MallResult addItem(MallItem mallItem, String desc);
+
+    MallItemDesc getItemDescById(long itemId);
 
 }
