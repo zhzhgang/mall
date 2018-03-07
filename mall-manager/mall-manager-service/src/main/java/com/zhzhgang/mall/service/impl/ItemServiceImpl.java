@@ -5,13 +5,17 @@ import com.github.pagehelper.PageInfo;
 import com.zhzhgang.mall.common.pojo.MallResult;
 import com.zhzhgang.mall.common.pojo.PageResult;
 import com.zhzhgang.mall.common.utils.IDUtils;
+import com.zhzhgang.mall.common.utils.JsonUtils;
+import com.zhzhgang.mall.jedis.JedisClient;
 import com.zhzhgang.mall.mapper.MallItemDescMapper;
 import com.zhzhgang.mall.mapper.MallItemMapper;
 import com.zhzhgang.mall.pojo.MallItem;
 import com.zhzhgang.mall.pojo.MallItemDesc;
 import com.zhzhgang.mall.pojo.MallItemExample;
 import com.zhzhgang.mall.service.ItemService;
+import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.jms.core.JmsTemplate;
 import org.springframework.jms.core.MessageCreator;
 import org.springframework.stereotype.Service;
@@ -41,9 +45,42 @@ public class ItemServiceImpl implements ItemService {
     @Resource(name = "itemAddTopic")
     private Destination destination;
 
+    @Autowired
+    private JedisClient jedisClient;
+
+    @Value("${ITEM_INFO}")
+    private String itemInfo;
+
+    @Value("${ITEM_EXPIRE}")
+    private Integer itemxpire;
+
     @Override
     public MallItem getItemById(long itemId) {
-        return mallItemMapper.selectByPrimaryKey(itemId);
+        // 查询数据库之前先查缓存
+        try {
+            String json = jedisClient.get(itemInfo + ":" + itemId + ":BASE");
+            if (StringUtils.isNotBlank(json)) {
+                // 把 json 转换成 pojo
+                MallItem mallItem = JsonUtils.jsonToPojo(json, MallItem.class);
+                return mallItem;
+            }
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+
+        // 缓存没有命中再查数据库
+        MallItem mallItem = mallItemMapper.selectByPrimaryKey(itemId);
+
+        try {
+            // 将查询结果添加到缓存
+            jedisClient.set(itemInfo + ":" + itemId + ":BASE", JsonUtils.objectToJson(mallItem));
+            // 设置过期时间
+            jedisClient.expire(itemInfo + ":" + itemId + ":BASE", itemxpire);
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+
+        return mallItem;
     }
 
     @Override
@@ -101,7 +138,30 @@ public class ItemServiceImpl implements ItemService {
 
     @Override
     public MallItemDesc getItemDescById(long itemId) {
+        // 查询数据库之前先查缓存
+        try {
+            String json = jedisClient.get(itemInfo + ":" + itemId + ":DESC");
+            if (StringUtils.isNotBlank(json)) {
+                // 把 json 转换成 pojo
+                MallItemDesc mallItemDesc= JsonUtils.jsonToPojo(json, MallItemDesc.class);
+                return mallItemDesc;
+            }
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+
+        // 缓存没有命中再查数据库
         MallItemDesc mallItemDesc = mallItemDescMapper.selectByPrimaryKey(itemId);
+
+        try {
+            // 将查询结果添加到缓存
+            jedisClient.set(itemInfo + ":" + itemId + ":DESC", JsonUtils.objectToJson(mallItemDesc));
+            // 设置过期时间
+            jedisClient.expire(itemInfo + ":" + itemId + ":DESC", itemxpire);
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+
         return mallItemDesc;
     }
 

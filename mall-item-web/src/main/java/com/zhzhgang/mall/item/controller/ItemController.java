@@ -31,7 +31,7 @@ public class ItemController {
         MallItemDesc mallItemDesc = itemService.getItemDescById(itemId);
 
         // 把数据传递给页面
-        model.addAttribute("item", mallItem);
+        model.addAttribute("item", item);
         model.addAttribute("itemDesc", mallItemDesc);
 
         // 返回逻辑视图
