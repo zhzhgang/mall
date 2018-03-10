@@ -32,5 +32,4 @@
         <property name="messageListener" ref="itemAddMessageListener"></property>
     </bean>
 
-
 </beans>
