@@ -24,6 +24,12 @@
     <!-- 配置包扫描器，扫描 @Controller 注解的类 -->
     <context:component-scan base-package="com.zhzhgang.mall.item.controller"/>
 
+    <!--freemarker 的配置-->
+    <bean id="freeMarkerConfigurer" class="org.springframework.web.servlet.view.freemarker.FreeMarkerConfigurer">
+        <property name="templateLoaderPath" value="WEB-INF/ftl"></property>
+        <property name="defaultEncoding" value="UTF-8"></property>
+    </bean>
+
     <!--引用 dubbo 服务-->
     <dubbo:application name="mall-item-web"/>
     <dubbo:registry protocol="zookeeper" address="192.168.56.101:2181"/>
