@@ -35,7 +35,7 @@
     <servlet-mapping>
         <servlet-name>mall-sso-web</servlet-name>
         <!-- 拦截所有以 .html 为后缀的请求 -->
-        <url-pattern>*.html</url-pattern>
+        <url-pattern>/</url-pattern>
     </servlet-mapping>
 
 </web-app>
