@@ -31,4 +31,11 @@ public interface UserService {
      * @return
      */
     MallResult login(String username, String password);
+
+    /**
+     * 根据 token 查询用户登录信息
+     * @param token
+     * @return
+     */
+    MallResult getUserByToken(String token);
 }

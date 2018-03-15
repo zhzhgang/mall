@@ -47,4 +47,10 @@ public class UserController {
         CookieUtils.setCookie(request, response, tokenKey, result.getData().toString());
         return result;
     }
+
+    @RequestMapping(value = "/token/{token}", method = RequestMethod.GET)
+    public MallResult getUserByToken(@PathVariable String token) {
+        MallResult user = userService.getUserByToken(token);
+        return user;
+    }
 }

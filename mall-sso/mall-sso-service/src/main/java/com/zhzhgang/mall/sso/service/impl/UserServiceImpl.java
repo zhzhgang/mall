@@ -153,4 +153,26 @@ public class UserServiceImpl implements UserService {
         // 返回成功，要把 token 返回
         return MallResult.ok(token);
     }
+
+    /**
+     * 根据 token 查询用户登录信息
+     *
+     * @param token
+     * @return
+     */
+    @Override
+    public MallResult getUserByToken(String token) {
+        String json = jedisClient.get(userSession + ":" + token);
+
+        if (StringUtils.isBlank(json)) {
+            MallResult.build(400, "您还未登录，请先登录");
+        }
+
+        // 重新设置 session 的过期时间
+        jedisClient.expire(userSession + ":" + token, sessionExpire);
+
+        MallUser user = JsonUtils.jsonToPojo(json, MallUser.class);
+
+        return MallResult.ok(user);
+    }
 }
