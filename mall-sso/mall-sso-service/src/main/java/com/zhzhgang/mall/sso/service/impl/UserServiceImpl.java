@@ -1,17 +1,21 @@
 package com.zhzhgang.mall.sso.service.impl;
 
 import com.zhzhgang.mall.common.pojo.MallResult;
+import com.zhzhgang.mall.common.utils.JsonUtils;
+import com.zhzhgang.mall.jedis.JedisClient;
 import com.zhzhgang.mall.mapper.MallUserMapper;
 import com.zhzhgang.mall.pojo.MallUser;
 import com.zhzhgang.mall.pojo.MallUserExample;
 import com.zhzhgang.mall.sso.service.UserService;
 import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
 import org.springframework.util.DigestUtils;
 
 import java.util.Date;
 import java.util.List;
+import java.util.UUID;
 
 /**
  * 用户处理 Service
@@ -24,6 +28,15 @@ public class UserServiceImpl implements UserService {
 
     @Autowired
     private MallUserMapper userMapper;
+
+    @Autowired
+    private JedisClient jedisClient;
+
+    @Value("${USER_SESSION}")
+    private String userSession;
+
+    @Value("${SESSION_EXPIRE}")
+    private Integer sessionExpire;
 
     /**
      * 检查数据是否可用
@@ -103,5 +116,41 @@ public class UserServiceImpl implements UserService {
         userMapper.insert(user);
 
         return MallResult.ok();
+    }
+
+    /**
+     * 登录
+     *
+     * @param username
+     * @param password
+     * @return
+     */
+    @Override
+    public MallResult login(String username, String password) {
+        // 判断用户名和密码是否正确
+        MallUserExample example = new MallUserExample();
+        MallUserExample.Criteria criteria = example.createCriteria();
+        criteria.andUsernameEqualTo(username);
+        List<MallUser> userList = userMapper.selectByExample(example);
+        if (userList == null && userList.size() > 0) {
+            return MallResult.build(400, "用户名或密码不正确");
+        }
+
+        MallUser user = userList.get(0);
+        if (!DigestUtils.md5DigestAsHex(password.getBytes()).equals(user.getPassword())) {
+            return MallResult.build(400, "用户名或密码不正确");
+        }
+        // 生成 token，使用 UUID
+        String token = UUID.randomUUID().toString();
+
+        // 把用户信息保存到 Redis，key 就是 token，value 就是用户信息
+        user.setPassword(null);
+        jedisClient.set(userSession + ":" + token, JsonUtils.objectToJson(user));
+
+        // 设置 key 的过期时间
+        jedisClient.expire(userSession + ":" + token, sessionExpire);
+
+        // 返回成功，要把 token 返回
+        return MallResult.ok(token);
     }
 }

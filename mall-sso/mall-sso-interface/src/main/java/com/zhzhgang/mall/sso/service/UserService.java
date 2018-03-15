@@ -23,4 +23,12 @@ public interface UserService {
      * @return
      */
     MallResult register(MallUser user);
+
+    /**
+     * 登录
+     * @param username
+     * @param password
+     * @return
+     */
+    MallResult login(String username, String password);
 }
