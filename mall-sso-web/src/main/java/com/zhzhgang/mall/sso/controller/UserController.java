@@ -34,7 +34,7 @@ public class UserController {
     }
 
     @RequestMapping(value = "/user/register", method = RequestMethod.POST)
-    public MallResult register(@RequestBody MallUser user) {
+    public MallResult register(MallUser user) {
         MallResult result = userService.register(user);
         return result;
     }
