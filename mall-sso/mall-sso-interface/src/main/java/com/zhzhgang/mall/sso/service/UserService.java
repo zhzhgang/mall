@@ -1,6 +1,7 @@
 package com.zhzhgang.mall.sso.service;
 
 import com.zhzhgang.mall.common.pojo.MallResult;
+import com.zhzhgang.mall.pojo.MallUser;
 
 /**
  * @author zhzhgang
@@ -15,4 +16,11 @@ public interface UserService {
      * @return
      */
     MallResult checkData(String data, int type);
+
+    /**
+     * 注册
+     * @param user
+     * @return
+     */
+    MallResult register(MallUser user);
 }
