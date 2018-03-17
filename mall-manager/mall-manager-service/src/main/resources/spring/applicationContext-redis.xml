@@ -15,7 +15,7 @@
         <constructor-arg name="port" value="6379"></constructor-arg>
     </bean>
 
-    <bean id="jedisClientPool" class="com.zhzhgang.mall.JedisClientPool"/>
+    <bean id="jedisClientPool" class="com.zhzhgang.mall.jedis.JedisClientPool"/>
 
     <!--redis 集群版-->
     <!--<bean id="jedisCluster" class="redis.clients.jedis.JedisCluster">-->

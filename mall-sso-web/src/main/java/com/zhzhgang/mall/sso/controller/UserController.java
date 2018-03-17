@@ -2,8 +2,10 @@ package com.zhzhgang.mall.sso.controller;
 
 import com.zhzhgang.mall.common.pojo.MallResult;
 import com.zhzhgang.mall.common.utils.CookieUtils;
+import com.zhzhgang.mall.common.utils.JsonUtils;
 import com.zhzhgang.mall.pojo.MallUser;
 import com.zhzhgang.mall.sso.service.UserService;
+import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Controller;
@@ -40,17 +42,25 @@ public class UserController {
     }
 
     @RequestMapping(value = "/user/login", method = RequestMethod.POST)
-    public MallResult login(@RequestBody MallUser user, HttpServletResponse response, HttpServletRequest request) {
+    public MallResult login(MallUser user, HttpServletResponse response, HttpServletRequest request) {
         MallResult result = userService.login(user.getUsername(), user.getPassword());
 
-        // 把 token 写入 cookie
-        CookieUtils.setCookie(request, response, tokenKey, result.getData().toString());
+        if (result.getStatus() == 200) {
+            // 把 token 写入 cookie
+            CookieUtils.setCookie(request, response, tokenKey, result.getData().toString());
+        }
         return result;
     }
 
-    @RequestMapping(value = "/token/{token}", method = RequestMethod.GET)
-    public MallResult getUserByToken(@PathVariable String token) {
+    @RequestMapping(value = "/user/token/{token}", method = RequestMethod.GET)
+    public String getUserByToken(@PathVariable String token, String callback) {
         MallResult user = userService.getUserByToken(token);
-        return user;
+
+        // 判断是否为 jsonp 请求
+        if (StringUtils.isNotBlank(callback)) {
+            return callback + "(" + JsonUtils.objectToJson(user) + ");";
+        }
+        return JsonUtils.objectToJson(user);
     }
+
 }
