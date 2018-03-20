@@ -2,6 +2,8 @@ package com.zhzhgang.mall.order.interceptor;
 
 import com.zhzhgang.mall.common.pojo.MallResult;
 import com.zhzhgang.mall.common.utils.CookieUtils;
+import com.zhzhgang.mall.common.utils.JsonUtils;
+import com.zhzhgang.mall.pojo.MallUser;
 import com.zhzhgang.mall.sso.service.UserService;
 import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -51,6 +53,9 @@ public class LoginInterceptor implements HandlerInterceptor {
             return false;
         }
         // 5.如果用户登录，放行
+        // 把用户信息放到 request 中
+        MallUser user = (MallUser) result.getData();
+        httpServletRequest.setAttribute("user", user);
         return true;
     }
 

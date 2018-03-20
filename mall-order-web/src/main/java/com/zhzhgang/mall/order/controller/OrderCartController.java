@@ -3,6 +3,7 @@ package com.zhzhgang.mall.order.controller;
 import com.zhzhgang.mall.common.utils.CookieUtils;
 import com.zhzhgang.mall.common.utils.JsonUtils;
 import com.zhzhgang.mall.pojo.MallItem;
+import com.zhzhgang.mall.pojo.MallUser;
 import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Controller;
@@ -26,6 +27,7 @@ public class OrderCartController {
     @RequestMapping("/order/order-cart")
     public String showOrderCart(HttpServletRequest request) {
         // 用户必须是登录状态
+        MallUser user = (MallUser) request.getAttribute("user");
 
         // 取用户 ID
         // 根据用户信息取收货地址列表，使用静态数据
