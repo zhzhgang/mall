@@ -36,4 +36,5 @@
     <dubbo:application name="mall-order-web"/>
     <dubbo:registry protocol="zookeeper" address="192.168.56.101:2181"/>
     <dubbo:reference interface="com.zhzhgang.mall.sso.service.UserService" id="userService" />
+    <dubbo:reference interface="com.zhzhgang.mall.order.service.OrderService" id="orderServiceImpl" />
 </beans>

@@ -1,13 +1,20 @@
 package com.zhzhgang.mall.order.controller;
 
+import com.zhzhgang.mall.common.pojo.MallResult;
 import com.zhzhgang.mall.common.utils.CookieUtils;
 import com.zhzhgang.mall.common.utils.JsonUtils;
+import com.zhzhgang.mall.order.pojo.OrderInfo;
+import com.zhzhgang.mall.order.service.OrderService;
 import com.zhzhgang.mall.pojo.MallItem;
 import com.zhzhgang.mall.pojo.MallUser;
 import org.apache.commons.lang3.StringUtils;
+import org.joda.time.DateTime;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Controller;
+import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestMethod;
 
 import javax.servlet.http.HttpServletRequest;
 import java.util.ArrayList;
@@ -23,6 +30,9 @@ public class OrderCartController {
 
     @Value("${CART_KEY}")
     private String cartKey;
+
+    @Autowired
+    private OrderService orderService;
 
     @RequestMapping("/order/order-cart")
     public String showOrderCart(HttpServletRequest request) {
@@ -48,6 +58,22 @@ public class OrderCartController {
         }
         List<MallItem> list = JsonUtils.jsonToList(cookieValue, MallItem.class);
         return list;
+    }
+
+    /**
+     * 生成订单处理
+     * @param orderInfo
+     * @return
+     */
+    @RequestMapping(value = "/order/create", method = RequestMethod.POST)
+    public String createOrder(OrderInfo orderInfo, Model model) {
+        MallResult result = orderService.createOrder(orderInfo);
+        model.addAttribute("orderId", result.getData().toString());
+        model.addAttribute("payment", orderInfo.getPayment());
+        DateTime dateTime = new DateTime();
+        dateTime = dateTime.plusDays(3);
+        model.addAttribute("date", dateTime.toString("yyyy-MM-dd"));
+        return "success";
     }
 
 }
